@@ -5,7 +5,7 @@ package class01;
  * @version 1.0
  */
 public class MergeSort {
-    public static void mergeSort(int[] arr) {
+    public static void mergeSort1(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;
         }
@@ -42,6 +42,32 @@ public class MergeSort {
         for (i = 0; i < help.length; i++) {
             arr[L + i] = help[i];
         }
+    }
+
+    public static void mergeSort2(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+
+        int N = arr.length;
+        int mergeSize = 1;
+        while (mergeSize < N) {
+            int L = 0;
+            while (L < N) {
+                int M = L + mergeSize - 1;
+                if (M >= N) {
+                    break;
+                }
+                int R = Math.min(N - 1, M + mergeSize);
+                merge(arr, L, M, R);
+                L = R + 1;
+            }
+            if (mergeSize > N / 2) { //考虑到int最大值，避免越界
+                break;
+            }
+            mergeSize <<= 1;
+        }
+
     }
 
 }
