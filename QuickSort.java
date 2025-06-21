@@ -43,11 +43,31 @@ public class QuickSort {
             return;
         }
 
-        int[] midArr = netherlandsFlag1(arr, 0, arr.length - 1);
+        int[] midArr = netherlandsFlag1(arr, 0, R);
         process2(arr, L, midArr[0] - 1);
         process2(arr, midArr[1] + 1, R);
     }
 
+
+    public static void quickSort3(int[] arr) {
+        if(arr == null || arr.length < 2) {
+            return;
+        }
+
+        process3(arr, 0, arr.length - 1);
+    }
+
+    public static void process3(int[] arr, int L, int R){
+        if(L >= R){
+            return;
+        }
+
+        swap(arr, (int)(Math.random() * (R - L + 1)), R); //随机选出一个数来作为准则
+        int[] midArr = netherlandsFlag1(arr, 0, R);
+        process3(arr, L, midArr[0] - 1);
+        process3(arr, midArr[1] + 1, R);
+
+    }
 
     public static int partition(int[] arr, int L, int R) {
         if (L > R) {
