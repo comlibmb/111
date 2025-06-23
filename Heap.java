@@ -10,10 +10,9 @@ public class Heap {
     private int[] heap;
     private int size;
 
-    public Heap(int heapSize, int size) {
-        this.heapSize = heapSize;
+    public Heap(int size) {
         this.heap = new int[size];
-        size = size;
+        this.size = size;
     }
 
     public boolean isEmpty() {
@@ -51,7 +50,7 @@ public class Heap {
 
 
     public void push(int val) {
-        if (size == heapSize) {
+        if (isFull()) {
             throw new HeapOverException();
         }
         heap[heapSize] = val;
@@ -77,4 +76,45 @@ public class Heap {
             super("Heap is full");
         }
     }
+
+    public static void main(String[] args) {
+        int times = 1000000;
+        int value = 1000;
+        int limit = 100;
+        for (int i = 0; i < times; i++) {
+            int curlimit = (int)(Math.random() * limit) + 1;
+            Heap heap = new Heap(curlimit);
+            RightMaxHeap rih = new RightMaxHeap(curlimit);
+            int cupOpTimes = (int)(Math.random() * limit);
+            for (int j = 0; j < cupOpTimes; j++) {
+                if(heap.isEmpty() != rih.isEmpty()){
+                    System.out.println("Oops");
+                }
+                if(heap.isFull() != rih.isFull()){
+                    System.out.println("Oops");
+                }
+                if(heap.isEmpty()){
+                    int curValue = (int)(Math.random() * value);
+                    heap.push(curValue);
+                    rih.push(curValue);
+                }else if(heap.isFull()){
+                    if(heap.pop() != rih.pop()){
+                        System.out.println("Oops");
+                    }
+                }else{
+                    if(Math.random() < 0.5){ //0.5概率加
+                        int curValue = (int)(Math.random() * limit);
+                        heap.push(curValue);
+                        rih.push(curValue);
+                    }else{
+                        if(heap.pop() != rih.pop()){
+                            System.out.println("Oops");
+                        }
+                    }
+                }
+
+            }
+        }
+    }
 }
+
