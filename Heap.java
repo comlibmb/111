@@ -10,13 +10,37 @@ public class Heap {
     private int[] heap;
     private int size;
 
+    public void heapSort(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+        //O(N * logN)
+        for (int i = 0; i < arr.length; i++) {
+            heapInsert(arr, i); //调整为大根堆
+        }
+
+        //O(N)
+        for (int i = arr.length - 1; i >= 0; i++) {
+            heapify(arr, i, arr.length - 1); //从后到前调整为大根堆
+        }
+
+        int heapSize = arr.length;
+        swap(arr, 0, --heapSize);
+        //O(N * logN)
+        while (heapSize > 0) {
+            heapify(arr, 0, heapSize);
+            swap(arr, 0, --heapSize);//逐步将最大值，次大值依次放到数组最后
+        }
+    }
+
+
     public Heap(int size) {
         this.heap = new int[size];
         this.size = size;
     }
 
     public boolean isEmpty() {
-        return size == 0;
+        return heapSize == 0;
     }
 
     public int size() {
@@ -29,7 +53,7 @@ public class Heap {
 
     public int pop() {
         int val = heap[0];
-        heap[0] = heap[--heapSize];
+        swap(heap, 0, --heapSize);
         heapify(heap, 0, heapSize);
         return val;
     }
@@ -54,13 +78,13 @@ public class Heap {
             throw new HeapOverException();
         }
         heap[heapSize] = val;
-        heapInsert(heapSize);
+        heapInsert(heap, heapSize++);
     }
 
-    private void heapInsert(int index) {
-        while (heap[index] > heap[(index - 1) >> 1]) {
-            swap(heap, index, (index - 1) >> 1);
-            index = (index - 1) >> 1;
+    private void heapInsert(int[] heap, int index) {
+        while (heap[index] > heap[(index - 1) / 2]) {
+            swap(heap, index, (index - 1) / 2);
+            index = (index - 1) / 2;
         }
     }
 
@@ -82,32 +106,32 @@ public class Heap {
         int value = 1000;
         int limit = 100;
         for (int i = 0; i < times; i++) {
-            int curlimit = (int)(Math.random() * limit) + 1;
+            int curlimit = (int) (Math.random() * limit) + 1;
             Heap heap = new Heap(curlimit);
             RightMaxHeap rih = new RightMaxHeap(curlimit);
-            int cupOpTimes = (int)(Math.random() * limit);
+            int cupOpTimes = (int) (Math.random() * limit);
             for (int j = 0; j < cupOpTimes; j++) {
-                if(heap.isEmpty() != rih.isEmpty()){
+                if (heap.isEmpty() != rih.isEmpty()) {
                     System.out.println("Oops");
                 }
-                if(heap.isFull() != rih.isFull()){
+                if (heap.isFull() != rih.isFull()) {
                     System.out.println("Oops");
                 }
-                if(heap.isEmpty()){
-                    int curValue = (int)(Math.random() * value);
+                if (heap.isEmpty()) {
+                    int curValue = (int) (Math.random() * value);
                     heap.push(curValue);
                     rih.push(curValue);
-                }else if(heap.isFull()){
-                    if(heap.pop() != rih.pop()){
+                } else if (heap.isFull()) {
+                    if (heap.pop() != rih.pop()) {
                         System.out.println("Oops");
                     }
-                }else{
-                    if(Math.random() < 0.5){ //0.5概率加
-                        int curValue = (int)(Math.random() * limit);
+                } else {
+                    if (Math.random() < 0.5) { //0.5概率加
+                        int curValue = (int) (Math.random() * limit);
                         heap.push(curValue);
                         rih.push(curValue);
-                    }else{
-                        if(heap.pop() != rih.pop()){
+                    } else {
+                        if (heap.pop() != rih.pop()) {
                             System.out.println("Oops");
                         }
                     }
