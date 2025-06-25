@@ -1,5 +1,7 @@
 package class01;
 
+import java.util.PriorityQueue;
+
 /**
  * @author pacai
  * @version 1.0
@@ -9,6 +11,29 @@ public class Heap {
     private int heapSize;
     private int[] heap;
     private int size;
+
+    //todo 一个几乎有序的数组，几乎有序是指，如果把数组排好序后，
+    // 每个元素移动的距离一定不超过k,并且k相对数组长度是较小的
+    public void sortedArrDistanceLessK(int[] arr, int k) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+        PriorityQueue<Integer> pg = new PriorityQueue<Integer>();
+        int index = 0;
+        for (; index < Math.min(arr.length - 1, k); index++) {
+            pg.add(arr[index]);
+        }
+        int i = 0;
+        for (; index < arr.length;index++, i++){
+            pg.add(arr[index]);
+            arr[i] = pg.poll();
+        }
+        while(!pg.isEmpty()){
+            arr[i++] = pg.poll();
+        }
+
+    }
+
 
     public void heapSort(int[] arr) {
         if (arr == null || arr.length < 2) {
@@ -29,7 +54,7 @@ public class Heap {
         //O(N * logN)
         while (heapSize > 0) {
             heapify(arr, 0, heapSize);
-            swap(arr, 0, --heapSize);//逐步将最大值，次大值依次放到数组最后
+            swap(arr, 0, --heapSize);//逐步将最大值，次大值...依次放到数组最后
         }
     }
 
